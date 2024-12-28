@@ -10,19 +10,22 @@ import ImageModal from "./ImageModal/ImageModal";
 import { fetchPhotos } from "../photos-api";
 
 
-
+interface Photo {
+  urls: { regular: string };
+  alt_description?: string;
+}
 
 export default function App() {
-  const [photos, setPhotos] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [query, setQueries] = useState('');
-  const [page, setPage] = useState(1);
-  const [total_pages, setTotalPages] = useState(1);
-  const [modalIsOpen, setIsOpen] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [photos, setPhotos] = useState<Photo[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
+  const [query, setQueries] = useState<string>('');
+  const [page, setPage] = useState<number>(1);
+  const [total_pages, setTotalPages] = useState<number>(1);
+  const [modalIsOpen, setIsOpen] = useState<boolean>(false);
+  const [selectedImage, setSelectedImage] = useState<{ url: string; alt: string } | null>(null);
 
-  function openModal(photo) {
+  function openModal(photo:Photo) {
     setSelectedImage({url: photo.urls.regular,
                       alt: photo.alt_description || "Image"});
     setIsOpen(true);
@@ -53,7 +56,7 @@ export default function App() {
     }; getData();
   }, [query, page]);
 
-  const handleChangeQuery = (query) => { setPhotos([]);
+  const handleChangeQuery = (query: string) => { setPhotos([]);
     setQueries(query);
     setPage(1);
     toast.success(`Searching for "${query}"`);
